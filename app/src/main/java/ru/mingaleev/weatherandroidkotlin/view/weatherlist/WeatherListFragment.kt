@@ -33,9 +33,26 @@ class WeatherListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(WeatherListViewModel::class.java)
         viewModel.liveData.observe(viewLifecycleOwner,object : Observer<AppState>{
             override fun onChanged(t: AppState) {
-                Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+                renderData(t)
             }
         })
         viewModel.sentRequest()
+    }
+
+    fun renderData(appState: AppState){
+        when(appState){
+            is AppState.Error -> {
+                Toast.makeText(requireContext(), "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
+            }
+            AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                val result = appState.weatherData
+                Toast.makeText(requireContext(), "Выводим данные $result", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
