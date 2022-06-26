@@ -31,7 +31,7 @@ class WeatherListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(WeatherListViewModel::class.java)
-        viewModel.liveData.observe(viewLifecycleOwner,object : Observer<AppState>{
+        viewModel.getLiveData().observe(viewLifecycleOwner,object : Observer<AppState>{
             override fun onChanged(t: AppState) {
                 //Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
                 renderData(t)
