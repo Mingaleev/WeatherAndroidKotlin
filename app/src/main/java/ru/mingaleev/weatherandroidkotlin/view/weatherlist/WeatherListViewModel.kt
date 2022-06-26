@@ -11,7 +11,7 @@ class WeatherListViewModel(val liveData:MutableLiveData<AppState> = MutableLiveD
         liveData.value =AppState.Loading
         Thread{
             sleep(2000L)
-            liveData.value =AppState.Success(Any())
+            liveData.postValue(AppState.Success(Any()))
         }
     }
 }
