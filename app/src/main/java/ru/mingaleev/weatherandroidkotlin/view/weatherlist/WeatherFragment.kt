@@ -1,4 +1,4 @@
-package ru.mingaleev.weatherandroidkotlin.view
+package ru.mingaleev.weatherandroidkotlin.view.weatherlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
