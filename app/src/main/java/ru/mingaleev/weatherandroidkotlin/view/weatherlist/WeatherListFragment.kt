@@ -43,7 +43,7 @@ class WeatherListFragment : Fragment() {
     fun renderData(appState: AppState){
         when(appState){
             is AppState.Error -> {
-                Toast.makeText(requireContext(), "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), appState.error.toString(), Toast.LENGTH_SHORT).show()
                 binding.loadingLayout.visibility = View.GONE
             }
             AppState.Loading -> {

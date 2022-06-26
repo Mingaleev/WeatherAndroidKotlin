@@ -32,10 +32,12 @@ class WeatherListViewModel(
 
     fun sentRequest() {
         liveData.value = Loading
-        if ((0..3).random() != 1) {
+        if ((1..3).random() != 1) {
             liveData.postValue(Success(repository.getWeather(55.755826, 37.617299900000035)))
         } else {
-            liveData.postValue(Error(throw IllegalStateException("Ошибка загрузки")))
+            liveData.postValue(Error(
+            error = IllegalStateException("Ошибка загрузки")
+            ))
         }
 
     }
