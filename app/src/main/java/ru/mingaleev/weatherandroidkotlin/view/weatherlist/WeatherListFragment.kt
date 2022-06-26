@@ -44,14 +44,18 @@ class WeatherListFragment : Fragment() {
         when(appState){
             is AppState.Error -> {
                 Toast.makeText(requireContext(), "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
+                binding.loadingLayout.visibility = View.GONE
             }
             AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
             }
             is AppState.Success -> {
-                binding.loadingLayout.visibility = View.GONE
                 val result = appState.weatherData
-                Toast.makeText(requireContext(), "Выводим данные $result", Toast.LENGTH_SHORT).show()
+                binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = result.city.name
+                binding.temperatureValue.text = result.temperature.toString()
+                binding.feelsLikeValue.text = result.feelsLike.toString()
+                binding.cityCoordinates.text = "${result.city.lat} / ${result.city.lon}"
             }
         }
     }
