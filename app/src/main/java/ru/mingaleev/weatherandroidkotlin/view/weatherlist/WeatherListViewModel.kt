@@ -7,6 +7,7 @@ import ru.mingaleev.weatherandroidkotlin.model.RepositoryILocalImpl
 import ru.mingaleev.weatherandroidkotlin.model.RepositoryIRemoteImpl
 import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState
 import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState.*
+import kotlin.random.Random
 
 class WeatherListViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
@@ -32,7 +33,8 @@ class WeatherListViewModel(
 
     fun sentRequest() {
         liveData.value = Loading
-        if ((1..3).random() != 1) {
+        val rand = Random(System.nanoTime())
+        if ((1..3).random(rand) != 1) {
             liveData.postValue(Success(repository.getWeather(55.755826, 37.617299900000035)))
         } else {
             liveData.postValue(Error(
