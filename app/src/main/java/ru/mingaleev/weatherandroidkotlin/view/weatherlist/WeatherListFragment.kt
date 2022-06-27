@@ -10,9 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListBinding
+import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.view.details.DetailsFragment
+import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
 import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState
 
-class WeatherListFragment : Fragment() {
+class WeatherListFragment : Fragment(), OnItemClick {
 
     companion object {
         fun newInstance() = WeatherListFragment()
@@ -58,16 +61,18 @@ class WeatherListFragment : Fragment() {
         when(appState){
             is AppState.Error -> {
                 Toast.makeText(requireContext(), appState.error.toString(), Toast.LENGTH_SHORT).show()
-                binding.loadingLayout.visibility = View.GONE
             }
-            AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
-            }
+            AppState.Loading -> {}
             is AppState.SuccessListCity -> {
-                binding.mainFragmentRecyclerView.adapter = WeatherListAdapter(appState.weatherListData)
-                binding.loadingLayout.visibility = View.GONE
+                binding.mainFragmentRecyclerView.adapter = WeatherListAdapter(appState.weatherListData, this)
             }
             is AppState.SuccessCity -> TODO()
         }
+    }
+
+    override fun onItemClick(weather: Weather) {
+        requireActivity().supportFragmentManager.beginTransaction().hide(this).add(
+            R.id.container, DetailsFragment.newInstance(weather)
+        ).addToBackStack("").commit()
     }
 }

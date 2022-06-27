@@ -1,16 +1,21 @@
 package ru.mingaleev.weatherandroidkotlin.domain
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 25,
     val feelsLike: Int = 28
-)
+):Parcelable
 
+@Parcelize
 data class City(
     val name: String,
     val lat: Double,
     val lon: Double
-)
+):Parcelable
 
 fun getWorldCities(): List<Weather> {
     return listOf(
