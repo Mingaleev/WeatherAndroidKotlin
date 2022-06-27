@@ -1,7 +1,7 @@
 package ru.mingaleev.weatherandroidkotlin
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
 import ru.mingaleev.weatherandroidkotlin.view.weatherlist.WeatherListFragment
 
