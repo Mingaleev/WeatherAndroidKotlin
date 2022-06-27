@@ -44,11 +44,14 @@ class WeatherListFragment : Fragment() {
             if (fabRForWorld) {
                 viewModel.getWeatherListForRussia()
                 binding.FragmentFAB.setImageResource(R.drawable.ic_russia)
+                fabRForWorld = false
             } else {
                 viewModel.getWeatherListForWorld()
                 binding.FragmentFAB.setImageResource(R.drawable.ic_earth)
+                fabRForWorld = true
             }
         }
+        viewModel.getWeatherListForRussia()
     }
 
     fun renderData(appState: AppState){
@@ -61,12 +64,8 @@ class WeatherListFragment : Fragment() {
                 binding.loadingLayout.visibility = View.VISIBLE
             }
             is AppState.SuccessListCity -> {
-                val result = appState.weatherData
+                binding.mainFragmentRecyclerView.adapter = WeatherListAdapter(appState.weatherListData)
                 binding.loadingLayout.visibility = View.GONE
-                binding.cityName.text = result.city.name
-                binding.temperatureValue.text = result.temperature.toString()
-                binding.feelsLikeValue.text = result.feelsLike.toString()
-                binding.cityCoordinates.text = "${result.city.lat} / ${result.city.lon}"
             }
             is AppState.SuccessCity -> TODO()
         }
