@@ -57,7 +57,7 @@ class WeatherListFragment : Fragment(), OnItemClick {
         viewModel.getWeatherListForRussia()
     }
 
-    fun renderData(appState: AppState){
+    private fun renderData(appState: AppState){
         when(appState){
             is AppState.Error -> {
                 Toast.makeText(requireContext(), appState.error.toString(), Toast.LENGTH_SHORT).show()
