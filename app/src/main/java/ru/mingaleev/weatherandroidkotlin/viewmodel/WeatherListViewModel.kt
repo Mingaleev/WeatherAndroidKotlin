@@ -1,11 +1,10 @@
-package ru.mingaleev.weatherandroidkotlin.view.weatherlist
+package ru.mingaleev.weatherandroidkotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.mingaleev.weatherandroidkotlin.model.Location
 import ru.mingaleev.weatherandroidkotlin.model.RepositoryILocalImpl
 import ru.mingaleev.weatherandroidkotlin.model.RepositoryListCity
-import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState
 import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState.*
 import kotlin.random.Random
 
@@ -40,16 +39,16 @@ class WeatherListViewModel(
 
     private fun sentRequest(location: Location) {
         liveData.value = Loading
-        val rand = Random(System.nanoTime())
-        if ((1..10).random(rand) != 1) {
-            liveData.postValue(SuccessListCity(repositoryListCity.getListWeather(location)))
-        } else {
-            liveData.postValue(
-                Error(
-                    error = IllegalStateException("Ошибка загрузки")
+        Thread {
+            Thread.sleep(3000L)
+            val rand = Random(System.nanoTime())
+            if ((1..10).random(rand) != 1) {
+                liveData.postValue(SuccessListCity(repositoryListCity.getListWeather(location)))
+            } else {
+                liveData.postValue(
+                    Error(IllegalStateException("Ошибка загрузки"))
                 )
-            )
-        }
-
+            }
+        }.start()
     }
 }
