@@ -41,14 +41,14 @@ class WeatherListFragment : Fragment(), OnItemClick {
         viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
 
         binding.FragmentFAB.setOnClickListener() {
-            if (fabRForWorld) {
+            fabRForWorld = if (fabRForWorld) {
                 viewModel.getWeatherListForRussia()
                 binding.FragmentFAB.setImageResource(R.drawable.ic_russia)
-                fabRForWorld = false
+                false
             } else {
                 viewModel.getWeatherListForWorld()
                 binding.FragmentFAB.setImageResource(R.drawable.ic_earth)
-                fabRForWorld = true
+                true
             }
         }
         viewModel.getWeatherListForRussia()
