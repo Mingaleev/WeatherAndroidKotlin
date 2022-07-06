@@ -1,6 +1,7 @@
 package ru.mingaleev.weatherandroidkotlin.utils
 
 import com.google.gson.Gson
+import ru.mingaleev.weatherandroidkotlin.BuildConfig
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.view.details.OnResponse
 import java.io.BufferedReader
@@ -17,7 +18,7 @@ object WeatherLoader {
         var myConnection: HttpURLConnection? = null
 
         myConnection = uri.openConnection() as HttpURLConnection
-        myConnection.addRequestProperty("X-Yandex-API-Key", "")
+        myConnection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
         Thread {
             val reader = BufferedReader(InputStreamReader(myConnection.inputStream))
             val weatherDTO = Gson().fromJson(getLines(reader), WeatherDTO::class.java)
