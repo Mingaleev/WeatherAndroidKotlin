@@ -14,10 +14,11 @@ object WeatherLoader {
 
     fun request(lat: Double, lon: Double, onResponse: OnResponse) {
 
-        val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}lon=${lon}")
+        val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
         var myConnection: HttpURLConnection? = null
 
         myConnection = uri.openConnection() as HttpURLConnection
+        myConnection.readTimeout = 5000
         myConnection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
         Thread {
             val reader = BufferedReader(InputStreamReader(myConnection.inputStream))

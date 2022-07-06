@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.WeatherLoader
 
 class DetailsFragment : Fragment() {
 
@@ -44,15 +45,25 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
-        renderData(weather)
+
+        weather?.let {
+            WeatherLoader.request(it.city.lat, it.city.lon) {weatherDTO ->
+                requireActivity().runOnUiThread {
+                    renderData(it.apply {
+                        temperature = weatherDTO.fact.temp
+                        feelsLike = weatherDTO.fact.feelsLike
+                    })
+                }
+            }
+        }
     }
 
-    private fun renderData(weather: Weather?) {
-        if (weather != null) {
-            binding.cityName.text = weather.city.name
-            binding.temperatureValue.text = weather.temperature.toString()
-            binding.feelsLikeValue.text = weather.feelsLike.toString()
-            binding.cityCoordinates.text = "${weather.city.lat} / ${weather.city.lon}"
+    private fun renderData(weather: Weather) {
+        with(binding) {
+            cityName.text = weather.city.name
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelsLike.toString()
+            cityCoordinates.text = "${weather.city.lat} / ${weather.city.lon}"
         }
 
     }
