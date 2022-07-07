@@ -40,9 +40,9 @@ class WeatherListViewModel(
     private fun sentRequest(location: Location) {
         liveData.value = Loading
         Thread {
-            Thread.sleep(1000L)
+            Thread.sleep(100L)
             val rand = Random(System.nanoTime())
-            if ((1..3).random(rand) != 1) {
+            if ((1..10).random(rand) != 1) {
                 liveData.postValue(SuccessListCity(repositoryListCity.getListWeather(location)))
             } else {
                 liveData.postValue(
