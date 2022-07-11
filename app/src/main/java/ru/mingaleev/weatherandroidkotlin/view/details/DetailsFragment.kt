@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
 import ru.mingaleev.weatherandroidkotlin.utils.WeatherLoader
 
 class DetailsFragment : Fragment() {
 
     companion object {
-        const val BUNDLE_WEATHER_EXTRA = "details"
         fun newInstance(weather: Weather): DetailsFragment {
             val fr = DetailsFragment()
             fr.arguments = Bundle().apply {
