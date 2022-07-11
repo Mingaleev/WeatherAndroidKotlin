@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.createAndShowSnackbar
 import ru.mingaleev.weatherandroidkotlin.view.details.DetailsFragment
 import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
 import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState
@@ -56,11 +57,14 @@ class WeatherListFragment : Fragment(), OnItemClick {
     private fun renderData(appState: AppState){
         when (appState) {
             is AppState.Error -> {
-                binding.mainFragmentRecyclerView.createAndShow("Ошибка загрузки", "Еще раз", Snackbar.LENGTH_LONG) { _ ->
-                    if (!fabRForWorld) {
-                        viewModel.getWeatherListForRussia()
-                    } else {
-                        viewModel.getWeatherListForWorld()
+                binding.mainFragmentRecyclerView.apply {
+                    createAndShowSnackbar(this.rootView, "Ошибка загрузки", "Еще раз", Snackbar.LENGTH_LONG)
+                    {
+                        if (!fabRForWorld) {
+                            viewModel.getWeatherListForRussia()
+                        } else {
+                            viewModel.getWeatherListForWorld()
+                        }
                     }
                 }
             }
@@ -86,9 +90,6 @@ class WeatherListFragment : Fragment(), OnItemClick {
             }
         }
     }
-
-    fun View.createAndShow(text: String, actionText: String, duration: Int, action: (v: View) -> Unit) {
-        Snackbar.make(this, text, duration).setAction(actionText, action).show() }
 
     override fun onItemClick(weather: Weather) {
         requireActivity().supportFragmentManager.beginTransaction().hide(this).add(
