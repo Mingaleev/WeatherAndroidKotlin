@@ -57,8 +57,7 @@ class WeatherListFragment : Fragment(), OnItemClick {
     private fun renderData(appState: AppState){
         when (appState) {
             is AppState.Error -> {
-                binding.mainFragmentRecyclerView.apply {
-                    createAndShowSnackbar(this.rootView, "Ошибка загрузки", "Еще раз", Snackbar.LENGTH_LONG)
+                binding.mainFragmentRecyclerView.createAndShowSnackbar( "Ошибка загрузки", "Еще раз", Snackbar.LENGTH_LONG)
                     {
                         if (!fabRForWorld) {
                             viewModel.getWeatherListForRussia()
@@ -67,7 +66,6 @@ class WeatherListFragment : Fragment(), OnItemClick {
                         }
                     }
                 }
-            }
             AppState.Loading -> {
                 binding.setStateFragment(appState)
             }

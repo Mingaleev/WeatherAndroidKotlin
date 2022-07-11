@@ -8,8 +8,8 @@ import java.util.stream.Collectors
 class Utils {
 }
 
-fun createAndShowSnackbar (view: View, text: String, actionText: String, duration: Int, action: (v: View) -> Unit) {
-    Snackbar.make(view, text, duration).setAction(actionText, action).show() }
+fun View.createAndShowSnackbar (text: String, actionText: String, duration: Int, action: (v: View) -> Unit) {
+    Snackbar.make(this, text, duration).setAction(actionText, action).show() }
 
 fun getLines(reader: BufferedReader): String {
     return reader.lines().collect(Collectors.joining("\n"))
