@@ -21,7 +21,7 @@ object WeatherLoader {
         var myConnection: HttpURLConnection? = null
             myConnection = uri.openConnection() as HttpURLConnection
             myConnection.readTimeout = 5000
-            myConnection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+            myConnection.addRequestProperty(API_KEY_YANDEX, BuildConfig.WEATHER_API_KEY)
         Thread {
             try {
                 val reader = BufferedReader(InputStreamReader(myConnection.inputStream))
@@ -31,9 +31,5 @@ object WeatherLoader {
                 Log.e("!!!", "Ошибка загрузки", e)
             }
         }.start()
-    }
-
-    private fun getLines(reader: BufferedReader): String {
-        return reader.lines().collect(Collectors.joining("\n"))
     }
 }
