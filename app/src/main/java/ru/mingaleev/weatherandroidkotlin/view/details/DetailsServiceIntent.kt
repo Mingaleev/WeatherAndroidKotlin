@@ -14,8 +14,8 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class DetailsServiceIntent: IntentService("") {
-    override fun onHandleIntent(intent: Intent?) {
 
+    override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             it.getParcelableExtra<City>(BUNDLE_CITY_KEY)?. let { city ->
                 val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${city.lat}&lon=${city.lon}")

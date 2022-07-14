@@ -1,16 +1,22 @@
 package ru.mingaleev.weatherandroidkotlin.view.details
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_CITY_KEY
+import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_DTO_KEY
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
-import ru.mingaleev.weatherandroidkotlin.utils.WeatherLoader
+import ru.mingaleev.weatherandroidkotlin.utils.WAVE_WEATHER_DTO
 
 class DetailsFragment : Fragment() {
 
@@ -48,10 +54,30 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
 
-        weather?.let {weatherLocal ->
-            requireActivity().startService(Intent(requireContext(), DetailsServiceIntent::class.java).apply {
-                putExtra(BUNDLE_CITY_KEY, weatherLocal.city)
-            })
+        weather?.let { weatherLocal ->
+
+            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+                object : BroadcastReceiver() {
+                    override fun onReceive(context: Context?, intent: Intent?) {
+                        intent?.let {
+                            it.getParcelableExtra<WeatherDTO>(BUNDLE_WEATHER_DTO_KEY)?.let {
+                                renderData(weatherLocal.apply {
+                                    temperature = it.fact.temp
+                                    feelsLike = it.fact.feelsLike
+                                })
+                            }
+                        }
+                    }
+                }, IntentFilter(WAVE_WEATHER_DTO)
+            )
+
+            requireActivity().startService(
+                Intent(
+                    requireContext(),
+                    DetailsServiceIntent::class.java
+                ).apply {
+                    putExtra(BUNDLE_CITY_KEY, weatherLocal.city)
+                })
         }
     }
 
