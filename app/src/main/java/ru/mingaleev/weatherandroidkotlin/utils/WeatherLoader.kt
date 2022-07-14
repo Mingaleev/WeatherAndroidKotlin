@@ -16,8 +16,6 @@ import javax.net.ssl.HttpsURLConnection
 object WeatherLoader {
 
     fun request(lat: Double, lon: Double, onResponse: OnResponse) {
-
-
         val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
 
         Thread {
