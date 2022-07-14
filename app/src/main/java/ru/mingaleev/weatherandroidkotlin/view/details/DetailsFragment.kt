@@ -20,25 +20,29 @@ import ru.mingaleev.weatherandroidkotlin.utils.WAVE_WEATHER_DTO
 
 class DetailsFragment : Fragment() {
 
-    companion object {
-        fun newInstance(weather: Weather): DetailsFragment {
-            val fr = DetailsFragment()
-            fr.arguments = Bundle().apply {
-                putParcelable(BUNDLE_WEATHER_EXTRA, weather)
-            }
-            return fr
-        }
-    }
-
     private var _binding: FragmentDetailsWeatherBinding? = null
     private val binding: FragmentDetailsWeatherBinding
         get() {
             return _binding!!
         }
+    lateinit var weatherLocal: Weather
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                it.getParcelableExtra<WeatherDTO>(BUNDLE_WEATHER_DTO_KEY)?.let {
+                    renderData(weatherLocal.apply {
+                        temperature = it.fact.temp
+                        feelsLike = it.fact.feelsLike
+                    })
+                }
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
     }
 
     override fun onCreateView(
@@ -50,25 +54,18 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
 
         weather?.let { weatherLocal ->
+            this.weatherLocal = weatherLocal
 
             LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-                object : BroadcastReceiver() {
-                    override fun onReceive(context: Context?, intent: Intent?) {
-                        intent?.let {
-                            it.getParcelableExtra<WeatherDTO>(BUNDLE_WEATHER_DTO_KEY)?.let {
-                                renderData(weatherLocal.apply {
-                                    temperature = it.fact.temp
-                                    feelsLike = it.fact.feelsLike
-                                })
-                            }
-                        }
-                    }
-                }, IntentFilter(WAVE_WEATHER_DTO)
+                receiver,
+                IntentFilter(WAVE_WEATHER_DTO)
             )
 
             requireActivity().startService(
@@ -89,5 +86,15 @@ class DetailsFragment : Fragment() {
             cityCoordinates.text = "${weather.city.lat} / ${weather.city.lon}"
         }
 
+    }
+
+    companion object {
+        fun newInstance(weather: Weather): DetailsFragment {
+            val fr = DetailsFragment()
+            fr.arguments = Bundle().apply {
+                putParcelable(BUNDLE_WEATHER_EXTRA, weather)
+            }
+            return fr
+        }
     }
 }

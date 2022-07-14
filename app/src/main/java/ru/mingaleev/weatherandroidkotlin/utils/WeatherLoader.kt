@@ -1,15 +1,11 @@
 package ru.mingaleev.weatherandroidkotlin.utils
 
-import android.util.Log
 import com.google.gson.Gson
 import ru.mingaleev.weatherandroidkotlin.BuildConfig
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.view.details.OnResponse
 import java.io.BufferedReader
-import java.io.FileNotFoundException
 import java.io.InputStreamReader
-import java.lang.Exception
-import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
