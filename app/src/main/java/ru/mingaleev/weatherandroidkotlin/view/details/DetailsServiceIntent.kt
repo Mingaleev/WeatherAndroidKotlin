@@ -10,7 +10,6 @@ import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.utils.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 

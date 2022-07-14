@@ -1,5 +1,6 @@
 package ru.mingaleev.weatherandroidkotlin.view.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_CITY_KEY
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
 import ru.mingaleev.weatherandroidkotlin.utils.WeatherLoader
 
@@ -46,15 +48,10 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
 
-        weather?.let {
-            WeatherLoader.request(it.city.lat, it.city.lon) {weatherDTO ->
-                requireActivity().runOnUiThread {
-                    renderData(it.apply {
-                        temperature = weatherDTO.fact.temp
-                        feelsLike = weatherDTO.fact.feelsLike
-                    })
-                }
-            }
+        weather?.let {weatherLocal ->
+            requireActivity().startService(Intent(requireContext(), DetailsServiceIntent::class.java).apply {
+                putExtra(BUNDLE_CITY_KEY, weatherLocal.city)
+            })
         }
     }
 
