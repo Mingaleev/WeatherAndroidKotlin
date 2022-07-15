@@ -3,7 +3,7 @@ package ru.mingaleev.weatherandroidkotlin
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
-import ru.mingaleev.weatherandroidkotlin.view.weatherlist.WeatherListFragment
+import ru.mingaleev.weatherandroidkotlin.view.weatherlist.CitiesListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState==null) {
-            supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.container, CitiesListFragment.newInstance()).commit()
         }
     }
 }

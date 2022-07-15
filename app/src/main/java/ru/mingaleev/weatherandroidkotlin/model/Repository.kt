@@ -2,10 +2,10 @@ package ru.mingaleev.weatherandroidkotlin.model
 
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 
-interface RepositoryListCity {
+interface RepositoryCitiesList {
     fun getListWeather(location: Location): List<Weather>
 }
-interface RepositoryCity {
+interface RepositoryDetails {
     fun getWeather(lat: Double, lon: Double): Weather
 }
 

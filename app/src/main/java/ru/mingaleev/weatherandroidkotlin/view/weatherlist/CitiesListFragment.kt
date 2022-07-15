@@ -13,19 +13,19 @@ import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.createAndShowSnackbar
 import ru.mingaleev.weatherandroidkotlin.view.details.DetailsFragment
 import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
-import ru.mingaleev.weatherandroidkotlin.viewmodel.AppState
-import ru.mingaleev.weatherandroidkotlin.viewmodel.WeatherListViewModel
+import ru.mingaleev.weatherandroidkotlin.viewmodel.citieslist.AppStateWeatherList
+import ru.mingaleev.weatherandroidkotlin.viewmodel.citieslist.CitiesListViewModel
 
-class WeatherListFragment : Fragment(), OnItemClick {
+class CitiesListFragment : Fragment(), OnItemClick {
 
     companion object {
-        fun newInstance() = WeatherListFragment()
+        fun newInstance() = CitiesListFragment()
     }
 
     var fabRForWorld = false
 
     private lateinit var binding: FragmentWeatherListBinding
-    lateinit var viewModel: WeatherListViewModel
+    lateinit var viewModel: CitiesListViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,7 +37,7 @@ class WeatherListFragment : Fragment(), OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(WeatherListViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CitiesListViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
 
         binding.FragmentFAB.setOnClickListener() {
@@ -54,9 +54,9 @@ class WeatherListFragment : Fragment(), OnItemClick {
         viewModel.getWeatherListForRussia()
     }
 
-    private fun renderData(appState: AppState){
+    private fun renderData(appState: AppStateWeatherList){
         when (appState) {
-            is AppState.Error -> {
+            is AppStateWeatherList.Error -> {
                 binding.mainFragmentRecyclerView.createAndShowSnackbar( "Ошибка загрузки", "Еще раз", Snackbar.LENGTH_LONG)
                     {
                         if (!fabRForWorld) {
@@ -66,21 +66,20 @@ class WeatherListFragment : Fragment(), OnItemClick {
                         }
                     }
                 }
-            AppState.Loading -> {
+            AppStateWeatherList.Loading -> {
                 binding.setStateFragment(appState)
             }
-            is AppState.SuccessListCity -> {
+            is AppStateWeatherList.SuccessListCity -> {
                 binding.mainFragmentRecyclerView.adapter =
-                    WeatherListAdapter(appState.weatherListData, this)
+                    CitiesListAdapter(appState.weatherListData, this)
                 binding.setStateFragment(appState)
             }
-            is AppState.SuccessCity -> TODO()
         }
     }
 
-    private fun FragmentWeatherListBinding.setStateFragment(appState: AppState) {
+    private fun FragmentWeatherListBinding.setStateFragment(appState: AppStateWeatherList) {
         when (appState) {
-            is AppState.Loading -> {
+            is AppStateWeatherList.Loading -> {
                 this.mainFragmentLoadingLayout.visibility = View.VISIBLE
             }
             else -> {

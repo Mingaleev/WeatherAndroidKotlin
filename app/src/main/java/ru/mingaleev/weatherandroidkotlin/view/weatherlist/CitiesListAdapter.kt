@@ -8,7 +8,7 @@ import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListRecycler
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
 
-class WeatherListAdapter(private val dataList:List<Weather>, private val callback: OnItemClick): RecyclerView.Adapter<WeatherListAdapter.WeatherViewHolder>() {
+class CitiesListAdapter(private val dataList:List<Weather>, private val callback: OnItemClick): RecyclerView.Adapter<CitiesListAdapter.WeatherViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding = FragmentWeatherListRecyclerItemsBinding.inflate(LayoutInflater.from(parent.context))
