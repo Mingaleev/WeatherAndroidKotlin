@@ -9,6 +9,5 @@ import kotlinx.android.parcel.Parcelize
 data class Fact(
     @SerializedName("feels_like")
     val feelsLike: Int,
-    @SerializedName("temp")
     val temp: Int,
 ) : Parcelable

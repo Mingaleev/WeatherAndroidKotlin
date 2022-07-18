@@ -17,7 +17,7 @@ class DetailsViewModel(
     }
 
     private fun choiceRepository() {
-        repository = when (3) {
+        repository = when (8) {
             1 -> {
                 RepositoryDetailsOkHttpImpl()
             }
