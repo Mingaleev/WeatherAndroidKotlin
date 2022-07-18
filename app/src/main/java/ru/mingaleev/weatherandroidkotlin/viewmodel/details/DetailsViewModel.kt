@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import okio.IOException
 import ru.mingaleev.weatherandroidkotlin.model.*
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
+import ru.mingaleev.weatherandroidkotlin.model.retrofit.RepositoryDetailsRetrofitImpl
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<AppStateDetails> = MutableLiveData<AppStateDetails>()
@@ -17,7 +18,7 @@ class DetailsViewModel(
     }
 
     private fun choiceRepository() {
-        repository = when (8) {
+        repository = when (2) {
             1 -> {
                 RepositoryDetailsOkHttpImpl()
             }
