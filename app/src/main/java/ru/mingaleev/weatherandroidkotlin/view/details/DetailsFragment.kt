@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
+import ru.mingaleev.weatherandroidkotlin.MyApp
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
@@ -43,19 +44,19 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
-        val imageLoader = ImageLoader.Builder(view.context).components{
-            add(SvgDecoder.Factory())
-        }.build()
         weather?.let { weatherLocal ->
             this.weatherLocal = weatherLocal
             viewModel.getWeather(weatherLocal.city.lat, weatherLocal.city.lon)
             viewModel.getLiveData().observe(viewLifecycleOwner) {
-                renderData(it, imageLoader)
+                renderData(it)
             }
         }
     }
 
-    private fun renderData(appStateDetails: AppStateDetails, imageLoader: ImageLoader) {
+    private fun renderData(appStateDetails: AppStateDetails) {
+        val imageLoader = ImageLoader.Builder(MyApp.getMyApp()).components{
+            add(SvgDecoder.Factory())
+        }.build()
         when (appStateDetails) {
             is AppStateDetails.Error -> {}
             AppStateDetails.Loading -> {}
