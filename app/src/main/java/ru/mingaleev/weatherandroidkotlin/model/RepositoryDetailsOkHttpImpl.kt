@@ -1,11 +1,39 @@
 package ru.mingaleev.weatherandroidkotlin.model
 
-import ru.mingaleev.weatherandroidkotlin.domain.Weather
-import ru.mingaleev.weatherandroidkotlin.domain.getDefaultCity
+import com.google.gson.Gson
+import okhttp3.*
+import ru.mingaleev.weatherandroidkotlin.BuildConfig
+import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
+import ru.mingaleev.weatherandroidkotlin.utils.API_KEY_YANDEX
+import java.io.IOException
 
 class RepositoryDetailsOkHttpImpl: RepositoryDetails {
-    override fun getCitiesList(lat: Double, lon: Double): Weather {
-        return Weather(getDefaultCity())
+    override fun getWeather(lat: Double, lon: Double, callback: MyLargeSuperCallback) {
+
+        val client = OkHttpClient()
+        val builder = Request.Builder()
+        builder.addHeader(API_KEY_YANDEX, BuildConfig.WEATHER_API_KEY)
+        builder.url("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
+        val request: Request = builder.build()
+        val call: Call = client.newCall(request)
+
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callback.onFailure(e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.code in 200..299 && response.body != null) {
+                    response.body?.let {
+                        val responseString = it.string()
+                        val weatherDTO = Gson().fromJson(responseString, WeatherDTO::class.java)
+                        callback.onResponse(weatherDTO)
+                    }
+                } else {
+//                    callback.onFailure()
+                }
+            }
+        })
     }
 }
 

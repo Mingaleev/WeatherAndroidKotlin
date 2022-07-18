@@ -1,22 +1,16 @@
 package ru.mingaleev.weatherandroidkotlin.view.details
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
-import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
-import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_CITY_KEY
-import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_DTO_KEY
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
-import ru.mingaleev.weatherandroidkotlin.utils.WAVE_WEATHER_DTO
+import ru.mingaleev.weatherandroidkotlin.viewmodel.details.AppStateDetails
+import ru.mingaleev.weatherandroidkotlin.viewmodel.details.DetailsViewModel
 
 class DetailsFragment : Fragment() {
 
@@ -26,23 +20,9 @@ class DetailsFragment : Fragment() {
             return _binding!!
         }
     lateinit var weatherLocal: Weather
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let {
-                it.getParcelableExtra<WeatherDTO>(BUNDLE_WEATHER_DTO_KEY)?.let {
-                    renderData(weatherLocal.apply {
-                        temperature = it.fact.temp
-                        feelsLike = it.fact.feelsLike
-                    })
-                }
-            }
-        }
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+    val viewModel by lazy {
+        ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -62,30 +42,27 @@ class DetailsFragment : Fragment() {
 
         weather?.let { weatherLocal ->
             this.weatherLocal = weatherLocal
-
-            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-                receiver,
-                IntentFilter(WAVE_WEATHER_DTO)
-            )
-
-            requireActivity().startService(
-                Intent(
-                    requireContext(),
-                    DetailsServiceIntent::class.java
-                ).apply {
-                    putExtra(BUNDLE_CITY_KEY, weatherLocal.city)
-                })
+            viewModel.getWeather(weatherLocal.city.lat, weatherLocal.city.lon)
+            viewModel.getLiveData().observe(viewLifecycleOwner) {
+                renderData(it)
+            }
         }
     }
 
-    private fun renderData(weather: Weather) {
-        with(binding) {
-            cityName.text = weather.city.name
-            temperatureValue.text = weather.temperature.toString()
-            feelsLikeValue.text = weather.feelsLike.toString()
-            cityCoordinates.text = "${weather.city.lat} / ${weather.city.lon}"
+    private fun renderData(appStateDetails: AppStateDetails) {
+        when (appStateDetails) {
+            is AppStateDetails.Error -> {}
+            AppStateDetails.Loading -> {}
+            is AppStateDetails.Success -> {
+                with(binding) {
+                    cityName.text = weatherLocal.city.name
+                    temperatureValue.text = appStateDetails.weatherDTO.fact.temp.toString()
+                    feelsLikeValue.text = appStateDetails.weatherDTO.fact.feelsLike.toString()
+                    cityCoordinates.text =
+                        "${appStateDetails.weatherDTO.info.lat} / ${appStateDetails.weatherDTO.info.lon}"
+                }
+            }
         }
-
     }
 
     companion object {
