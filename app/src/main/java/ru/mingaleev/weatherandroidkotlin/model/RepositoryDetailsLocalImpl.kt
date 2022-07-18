@@ -15,7 +15,7 @@ class RepositoryDetailsLocalImpl : RepositoryDetails {
         callback.onResponse(convertModelToDTO(response.first()))
     }
 
-    fun convertModelToDTO(weather: Weather): WeatherDTO {
+    private fun convertModelToDTO(weather: Weather): WeatherDTO {
         return WeatherDTO(
             Fact(weather.feelsLike, weather.temperature),
             Info(weather.city.lat, weather.city.lon)

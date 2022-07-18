@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
@@ -19,9 +22,9 @@ class DetailsFragment : Fragment() {
         get() {
             return _binding!!
         }
-    lateinit var weatherLocal: Weather
+    private lateinit var weatherLocal: Weather
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
@@ -36,20 +39,23 @@ class DetailsFragment : Fragment() {
 
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
-
+        val imageLoader = ImageLoader.Builder(view.context).components{
+            add(SvgDecoder.Factory())
+        }.build()
         weather?.let { weatherLocal ->
             this.weatherLocal = weatherLocal
             viewModel.getWeather(weatherLocal.city.lat, weatherLocal.city.lon)
             viewModel.getLiveData().observe(viewLifecycleOwner) {
-                renderData(it)
+                renderData(it, imageLoader)
             }
         }
     }
 
-    private fun renderData(appStateDetails: AppStateDetails) {
+    private fun renderData(appStateDetails: AppStateDetails, imageLoader: ImageLoader) {
         when (appStateDetails) {
             is AppStateDetails.Error -> {}
             AppStateDetails.Loading -> {}
@@ -60,10 +66,13 @@ class DetailsFragment : Fragment() {
                     feelsLikeValue.text = appStateDetails.weatherDTO.fact.feelsLike.toString()
                     cityCoordinates.text =
                         "${appStateDetails.weatherDTO.info.lat} / ${appStateDetails.weatherDTO.info.lon}"
+                    imageWeather.load(
+                        "https://yastatic.net/weather/i/icons/funky/dark/${appStateDetails.weatherDTO.fact.icon}.svg", imageLoader)
                 }
             }
         }
     }
+
 
     companion object {
         fun newInstance(weather: Weather): DetailsFragment {
