@@ -10,4 +10,9 @@ const val BUNDLE_WEATHER_DTO_KEY = "WeatherDTO"
 const val RETROFIT_WEATHER_API_LAT = "lat"
 const val RETROFIT_WEATHER_API_LON = "lon"
 
+const val SP_DB_NAME = "RUSSIA_OR_WORLD"
+const val SP_KEY_DB = "KEY"
+
+
+
 

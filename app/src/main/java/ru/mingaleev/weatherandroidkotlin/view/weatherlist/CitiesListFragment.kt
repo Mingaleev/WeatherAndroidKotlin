@@ -1,5 +1,6 @@
 package ru.mingaleev.weatherandroidkotlin.view.weatherlist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.SP_DB_NAME
+import ru.mingaleev.weatherandroidkotlin.utils.SP_KEY_DB
 import ru.mingaleev.weatherandroidkotlin.utils.createAndShowSnackbar
 import ru.mingaleev.weatherandroidkotlin.view.details.DetailsFragment
 import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
@@ -22,7 +25,7 @@ class CitiesListFragment : Fragment(), OnItemClick {
         fun newInstance() = CitiesListFragment()
     }
 
-    var fabRForWorld = false
+    private var fabRForWorld = false
 
     private lateinit var binding: FragmentWeatherListBinding
     lateinit var viewModel: CitiesListViewModel
@@ -40,18 +43,29 @@ class CitiesListFragment : Fragment(), OnItemClick {
         viewModel = ViewModelProvider(this).get(CitiesListViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
 
+        val sp = requireActivity().getSharedPreferences(SP_DB_NAME, Context.MODE_PRIVATE)
+        fabRForWorld = sp.getBoolean(SP_KEY_DB, true)
+        setRussiaOrWorld()
+
         binding.FragmentFAB.setOnClickListener() {
-            fabRForWorld = if (fabRForWorld) {
-                viewModel.getWeatherListForRussia()
-                binding.FragmentFAB.setImageResource(R.drawable.ic_russia)
-                false
-            } else {
-                viewModel.getWeatherListForWorld()
-                binding.FragmentFAB.setImageResource(R.drawable.ic_earth)
-                true
+            setRussiaOrWorld()
+            sp.edit().apply{
+                putBoolean(SP_KEY_DB, !fabRForWorld)
+                apply()
             }
         }
-        viewModel.getWeatherListForRussia()
+    }
+
+    private fun setRussiaOrWorld (){
+        fabRForWorld = if (fabRForWorld) {
+            viewModel.getWeatherListForWorld()
+            binding.FragmentFAB.setImageResource(R.drawable.ic_earth)
+            false
+        } else {
+            viewModel.getWeatherListForRussia()
+            binding.FragmentFAB.setImageResource(R.drawable.ic_russia)
+            true
+        }
     }
 
     private fun renderData(appState: AppStateWeatherList){
