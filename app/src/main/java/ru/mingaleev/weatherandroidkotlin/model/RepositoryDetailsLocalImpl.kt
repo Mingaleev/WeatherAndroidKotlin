@@ -1,5 +1,6 @@
 package ru.mingaleev.weatherandroidkotlin.model
 
+import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.domain.getRussianCities
 import ru.mingaleev.weatherandroidkotlin.domain.getWorldCities
@@ -8,10 +9,10 @@ import ru.mingaleev.weatherandroidkotlin.model.dto.Info
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 
 class RepositoryDetailsLocalImpl : RepositoryDetails {
-    override fun getWeather(lat: Double, lon: Double, callback: MyLargeSuperCallback) {
+    override fun getWeather(city: City, callback: MyLargeSuperCallback) {
         val listCities = getRussianCities().toMutableList()
         listCities.addAll(getWorldCities())
-        val response = listCities.filter { it.city.lat == lat && it.city.lon == lon }
+        val response = listCities.filter { it.city.lat == city.lat && it.city.lon == city.lon }
         callback.onResponse(convertModelToDTO(response.first()))
     }
 

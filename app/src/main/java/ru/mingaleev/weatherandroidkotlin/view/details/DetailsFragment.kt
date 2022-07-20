@@ -46,7 +46,7 @@ class DetailsFragment : Fragment() {
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
         weather?.let { weatherLocal ->
             this.weatherLocal = weatherLocal
-            viewModel.getWeather(weatherLocal.city.lat, weatherLocal.city.lon)
+            viewModel.getWeather(weatherLocal.city)
             viewModel.getLiveData().observe(viewLifecycleOwner) {
                 renderData(it)
             }

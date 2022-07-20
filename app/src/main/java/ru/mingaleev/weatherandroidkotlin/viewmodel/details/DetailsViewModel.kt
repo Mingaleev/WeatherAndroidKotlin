@@ -3,6 +3,7 @@ package ru.mingaleev.weatherandroidkotlin.viewmodel.details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okio.IOException
+import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.model.*
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.model.retrofit.RepositoryDetailsRetrofitImpl
@@ -34,10 +35,10 @@ class DetailsViewModel(
         }
     }
 
-    fun getWeather(lat: Double, lon: Double) {
+    fun getWeather(city: City) {
         choiceRepository()
         liveData.value = AppStateDetails.Loading
-        repository.getWeather(lat, lon, callback)
+        repository.getWeather(city, callback)
     }
 
     private val callback = object : MyLargeSuperCallback {

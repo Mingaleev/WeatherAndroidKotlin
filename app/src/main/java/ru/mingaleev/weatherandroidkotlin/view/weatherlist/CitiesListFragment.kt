@@ -28,7 +28,7 @@ class CitiesListFragment : Fragment(), OnItemClick {
     private var fabRForWorld = false
 
     private lateinit var binding: FragmentWeatherListBinding
-    lateinit var viewModel: CitiesListViewModel
+    private lateinit var viewModel: CitiesListViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +44,7 @@ class CitiesListFragment : Fragment(), OnItemClick {
         viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
 
         val sp = requireActivity().getSharedPreferences(SP_DB_NAME, Context.MODE_PRIVATE)
-        fabRForWorld = sp.getBoolean(SP_KEY_DB, true)
+        fabRForWorld = sp.getBoolean(SP_KEY_DB, false)
         setRussiaOrWorld()
 
         binding.FragmentFAB.setOnClickListener() {
