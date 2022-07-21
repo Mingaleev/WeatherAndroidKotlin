@@ -1,6 +1,7 @@
 package ru.mingaleev.weatherandroidkotlin.view.contentprovaider
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -42,6 +43,15 @@ class ContentProviderFragment : Fragment() {
             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
         if (permResult == PackageManager.PERMISSION_GRANTED) {
             getContacts()
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Доступ к кнотактам")
+                .setMessage("Мне только спросить и все!)")
+                .setPositiveButton("Предоставить доступ") { _, _ ->
+                    permissionRequest(Manifest.permission.READ_CONTACTS)
+                }.setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
         } else {
             permissionRequest(Manifest.permission.READ_CONTACTS)
         }
