@@ -3,10 +3,9 @@ package ru.mingaleev.weatherandroidkotlin.viewmodel.historylistcities
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
-import ru.mingaleev.weatherandroidkotlin.model.*
-import ru.mingaleev.weatherandroidkotlin.viewmodel.citieslist.AppStateWeatherList.Loading
-import ru.mingaleev.weatherandroidkotlin.viewmodel.citieslist.AppStateWeatherList.SuccessListCity
-import ru.mingaleev.weatherandroidkotlin.viewmodel.details.AppStateDetails
+import ru.mingaleev.weatherandroidkotlin.model.MySuperCallbackListCities
+import ru.mingaleev.weatherandroidkotlin.model.RepositoryHistoryCitiesList
+import ru.mingaleev.weatherandroidkotlin.model.RepositoryHistoryCitiesListImp
 import java.io.IOException
 
 class HistoryCitiesListViewModel(

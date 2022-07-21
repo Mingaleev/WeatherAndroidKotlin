@@ -6,5 +6,6 @@
     <string name="error">Error</string>
     <string name="reload">Reload</string>
     <string name="history">HISTORY</string>
+    <string name="content_provider">CP</string>
 
 </resources>

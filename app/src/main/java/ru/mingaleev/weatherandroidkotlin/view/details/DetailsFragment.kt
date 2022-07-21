@@ -78,4 +78,9 @@ class DetailsFragment : Fragment() {
             return fr
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
+    }
 }
