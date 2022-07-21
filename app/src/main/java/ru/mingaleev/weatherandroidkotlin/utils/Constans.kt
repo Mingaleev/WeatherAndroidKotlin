@@ -13,6 +13,8 @@ const val RETROFIT_WEATHER_API_LON = "lon"
 const val SP_DB_NAME = "RUSSIA_OR_WORLD"
 const val SP_KEY_DB = "KEY"
 
+const val ROOM_DB_NAME = "room_data_base"
+
 
 
 
