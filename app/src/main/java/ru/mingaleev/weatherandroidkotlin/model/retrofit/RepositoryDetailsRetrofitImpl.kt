@@ -12,6 +12,7 @@ import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.model.MyLargeSuperCallback
 import ru.mingaleev.weatherandroidkotlin.model.RepositoryDetails
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
+import ru.mingaleev.weatherandroidkotlin.utils.converterWeatherDtoToWeather
 
 class RepositoryDetailsRetrofitImpl : RepositoryDetails {
     override fun getWeather(city: City, callback: MyLargeSuperCallback) {
@@ -28,7 +29,7 @@ class RepositoryDetailsRetrofitImpl : RepositoryDetails {
             .enqueue(object : Callback<WeatherDTO> {
                 override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
                     if (response.isSuccessful && response.body() != null) {
-                        callback.onResponse(response.body()!!)
+                        callback.onResponse(converterWeatherDtoToWeather(response.body()!!, city.name))
                     } else {
                         callback.onFailure(IOException("403/404 Error"))
                     }
@@ -37,7 +38,6 @@ class RepositoryDetailsRetrofitImpl : RepositoryDetails {
                 override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
                     callback.onFailure(t as IOException /* = java.io.IOException */) //костыль
                 }
-
             })
 
     }

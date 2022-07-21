@@ -6,6 +6,7 @@ import ru.mingaleev.weatherandroidkotlin.BuildConfig
 import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.utils.API_KEY_YANDEX
+import ru.mingaleev.weatherandroidkotlin.utils.converterWeatherDtoToWeather
 import java.io.IOException
 
 class RepositoryDetailsOkHttpImpl: RepositoryDetails {
@@ -28,7 +29,7 @@ class RepositoryDetailsOkHttpImpl: RepositoryDetails {
                     response.body?.let {
                         val responseString = it.string()
                         val weatherDTO = Gson().fromJson(responseString, WeatherDTO::class.java)
-                        callback.onResponse(weatherDTO)
+                        callback.onResponse(converterWeatherDtoToWeather(weatherDTO, city.name))
                     }
                 } else {
 //                    callback.onFailure()

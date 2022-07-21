@@ -2,7 +2,6 @@ package ru.mingaleev.weatherandroidkotlin.model.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.mingaleev.weatherandroidkotlin.domain.City
 
 @Entity
 data class WeatherEntity(
@@ -11,7 +10,7 @@ data class WeatherEntity(
     val name: String,
     val lat: Double,
     val lon: Double,
-    val city: City,
+    val city: String,
     val temperature: Int,
     val feelsLike: Int
 )

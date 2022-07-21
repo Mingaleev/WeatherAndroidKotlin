@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okio.IOException
 import ru.mingaleev.weatherandroidkotlin.domain.City
+import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.model.*
-import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.model.retrofit.RepositoryDetailsRetrofitImpl
 
 class DetailsViewModel(
@@ -42,8 +42,8 @@ class DetailsViewModel(
     }
 
     private val callback = object : MyLargeSuperCallback {
-        override fun onResponse(weatherDTO: WeatherDTO) {
-            liveData.postValue(AppStateDetails.Success(weatherDTO))
+        override fun onResponse(weather: Weather) {
+            liveData.postValue(AppStateDetails.Success(weather))
         }
 
         override fun onFailure(e: IOException) {

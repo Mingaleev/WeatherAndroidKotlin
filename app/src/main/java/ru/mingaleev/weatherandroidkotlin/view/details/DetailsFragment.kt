@@ -23,7 +23,6 @@ class DetailsFragment : Fragment() {
         get() {
             return _binding!!
         }
-    private lateinit var weatherLocal: Weather
 
     private val viewModel by lazy {
         ViewModelProvider(this).get(DetailsViewModel::class.java)
@@ -38,14 +37,10 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_EXTRA)
         weather?.let { weatherLocal ->
-            this.weatherLocal = weatherLocal
             viewModel.getWeather(weatherLocal.city)
             viewModel.getLiveData().observe(viewLifecycleOwner) {
                 renderData(it)
@@ -62,18 +57,17 @@ class DetailsFragment : Fragment() {
             AppStateDetails.Loading -> {}
             is AppStateDetails.Success -> {
                 with(binding) {
-                    cityName.text = weatherLocal.city.name
-                    temperatureValue.text = appStateDetails.weatherDTO.fact.temp.toString()
-                    feelsLikeValue.text = appStateDetails.weatherDTO.fact.feelsLike.toString()
+                    cityName.text = appStateDetails.weather.city.name
+                    temperatureValue.text = appStateDetails.weather.temperature.toString()
+                    feelsLikeValue.text = appStateDetails.weather.feelsLike.toString()
                     cityCoordinates.text =
-                        "${appStateDetails.weatherDTO.info.lat} / ${appStateDetails.weatherDTO.info.lon}"
+                        "${appStateDetails.weather.city.lat} / ${appStateDetails.weather.city.lon}"
                     imageWeather.load(
-                        "https://yastatic.net/weather/i/icons/funky/dark/${appStateDetails.weatherDTO.fact.icon}.svg", imageLoader)
+                        "https://yastatic.net/weather/i/icons/funky/dark/${appStateDetails.weather.icon}.svg", imageLoader)
                 }
             }
         }
     }
-
 
     companion object {
         fun newInstance(weather: Weather): DetailsFragment {
