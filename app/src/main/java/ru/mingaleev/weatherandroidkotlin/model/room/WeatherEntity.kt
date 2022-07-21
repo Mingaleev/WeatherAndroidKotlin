@@ -7,10 +7,9 @@ import androidx.room.PrimaryKey
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val name: String,
+    val nameCity: String,
     val lat: Double,
     val lon: Double,
-    val city: String,
     val temperature: Int,
     val feelsLike: Int
 )

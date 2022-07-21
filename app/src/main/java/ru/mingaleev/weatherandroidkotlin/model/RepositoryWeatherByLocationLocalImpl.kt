@@ -4,7 +4,7 @@ import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.getRussianCities
 import ru.mingaleev.weatherandroidkotlin.domain.getWorldCities
 
-class RepositoryDetailsLocalImpl : RepositoryDetails {
+class RepositoryWeatherByLocationLocalImpl : RepositoryWeatherByLocation {
     override fun getWeather(city: City, callback: MyLargeSuperCallback) {
         val listCities = getRussianCities().toMutableList()
         listCities.addAll(getWorldCities())

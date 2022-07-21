@@ -4,8 +4,12 @@ import okio.IOException
 import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 
-interface RepositoryDetails {
+interface RepositoryWeatherByLocation {
     fun getWeather(city: City, callback: MyLargeSuperCallback)
+}
+
+interface RepositoryAddWeatherToDB {
+    fun addWeather(weather: Weather)
 }
 
 interface MyLargeSuperCallback {

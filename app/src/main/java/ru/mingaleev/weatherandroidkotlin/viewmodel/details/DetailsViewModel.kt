@@ -6,31 +6,50 @@ import okio.IOException
 import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.model.*
-import ru.mingaleev.weatherandroidkotlin.model.retrofit.RepositoryDetailsRetrofitImpl
+import ru.mingaleev.weatherandroidkotlin.model.retrofit.RepositoryWeatherByLocationRetrofitImpl
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<AppStateDetails> = MutableLiveData<AppStateDetails>()
 ) : ViewModel() {
 
-    private lateinit var repository: RepositoryDetails
+    private lateinit var repositoryWeatherByLocation: RepositoryWeatherByLocation
+    private lateinit var repositoryAddWeatherToDB: RepositoryAddWeatherToDB
+
     fun getLiveData(): MutableLiveData<AppStateDetails> {
         choiceRepository()
         return liveData
     }
 
     private fun choiceRepository() {
-        repository = when (2) {
-            1 -> {
-                RepositoryDetailsOkHttpImpl()
+        if (isConnection()){
+            repositoryWeatherByLocation = when (4) {
+                1 -> {
+                    RepositoryWeatherByLocationOkHttpImpl()
+                }
+                2 -> {
+                    RepositoryWeatherByLocationRetrofitImpl()
+                }
+                3 -> {
+                    RepositoryWeatherByLocationWeatherLoaderImpl()
+                }
+                4 -> {
+                    RepositoryRoomImpl()
+                }
+                else -> {
+                    RepositoryWeatherByLocationLocalImpl()
+                }
             }
-            2 -> {
-                RepositoryDetailsRetrofitImpl()
-            }
-            3 -> {
-                RepositoryDetailsWeatherLoaderImpl()
+        } else {
+            repositoryWeatherByLocation = RepositoryRoomImpl()
+        }
+
+
+        repositoryAddWeatherToDB = when(0) {
+            0 -> {
+                RepositoryRoomImpl()
             }
             else -> {
-                RepositoryDetailsLocalImpl()
+                RepositoryRoomImpl()
             }
         }
     }
@@ -38,16 +57,21 @@ class DetailsViewModel(
     fun getWeather(city: City) {
         choiceRepository()
         liveData.value = AppStateDetails.Loading
-        repository.getWeather(city, callback)
+        repositoryWeatherByLocation.getWeather(city, callback)
     }
 
     private val callback = object : MyLargeSuperCallback {
         override fun onResponse(weather: Weather) {
+            repositoryAddWeatherToDB.addWeather(weather)
             liveData.postValue(AppStateDetails.Success(weather))
         }
 
         override fun onFailure(e: IOException) {
             liveData.postValue(AppStateDetails.Error(e))
         }
+    }
+
+    private fun isConnection (): Boolean{
+        return true
     }
 }

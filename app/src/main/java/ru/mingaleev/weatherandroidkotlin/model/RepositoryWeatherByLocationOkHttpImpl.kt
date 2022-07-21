@@ -9,7 +9,7 @@ import ru.mingaleev.weatherandroidkotlin.utils.API_KEY_YANDEX
 import ru.mingaleev.weatherandroidkotlin.utils.converterWeatherDtoToWeather
 import java.io.IOException
 
-class RepositoryDetailsOkHttpImpl: RepositoryDetails {
+class RepositoryWeatherByLocationOkHttpImpl: RepositoryWeatherByLocation {
     override fun getWeather(city: City, callback: MyLargeSuperCallback) {
 
         val client = OkHttpClient()
