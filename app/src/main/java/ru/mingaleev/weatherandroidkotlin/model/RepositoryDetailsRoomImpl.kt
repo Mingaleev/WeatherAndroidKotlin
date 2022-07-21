@@ -4,10 +4,10 @@ import ru.mingaleev.weatherandroidkotlin.MyApp
 import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.model.room.WeatherEntity
-import kotlin.concurrent.thread
 
 class RepositoryRoomImpl: RepositoryWeatherByLocation, RepositoryAddWeatherToDB {
-    override fun getWeather(city: City, callback: MyLargeSuperCallback) {
+
+    override fun getWeather(city: City, callback: MySuperCallbackCity) {
         Thread{
             callback.onResponse(
                 convertorWeatherEntityToWeather(
@@ -16,7 +16,9 @@ class RepositoryRoomImpl: RepositoryWeatherByLocation, RepositoryAddWeatherToDB 
     }
 
     override fun addWeather(weather: Weather) {
+        Thread{
             MyApp.getWeatherDatabase().weatherDAO().insert(convertorWeatherToWeatherEntity(weather))
+        }.start()
     }
 
     private fun convertorWeatherEntityToWeather(weatherEntity: WeatherEntity): Weather{

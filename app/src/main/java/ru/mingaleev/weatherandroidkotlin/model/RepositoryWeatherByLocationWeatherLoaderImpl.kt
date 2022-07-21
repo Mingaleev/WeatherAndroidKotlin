@@ -14,7 +14,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class RepositoryWeatherByLocationWeatherLoaderImpl: RepositoryWeatherByLocation {
-    override fun getWeather(city: City, callback: MyLargeSuperCallback) {
+    override fun getWeather(city: City, callback: MySuperCallbackCity) {
         val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${city.lat}&lon=${city.lon}")
         Thread {
             var myConnection: HttpsURLConnection? = null

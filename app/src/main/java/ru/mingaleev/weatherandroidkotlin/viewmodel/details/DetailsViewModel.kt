@@ -22,7 +22,7 @@ class DetailsViewModel(
 
     private fun choiceRepository() {
         if (isConnection()){
-            repositoryWeatherByLocation = when (4) {
+            repositoryWeatherByLocation = when (2) {
                 1 -> {
                     RepositoryWeatherByLocationOkHttpImpl()
                 }
@@ -60,7 +60,7 @@ class DetailsViewModel(
         repositoryWeatherByLocation.getWeather(city, callback)
     }
 
-    private val callback = object : MyLargeSuperCallback {
+    private val callback = object : MySuperCallbackCity {
         override fun onResponse(weather: Weather) {
             repositoryAddWeatherToDB.addWeather(weather)
             liveData.postValue(AppStateDetails.Success(weather))

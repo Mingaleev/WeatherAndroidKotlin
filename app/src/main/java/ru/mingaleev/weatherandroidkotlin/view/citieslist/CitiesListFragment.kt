@@ -1,4 +1,4 @@
-package ru.mingaleev.weatherandroidkotlin.view.weatherlist
+package ru.mingaleev.weatherandroidkotlin.view.citieslist
 
 import android.content.Context
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
-import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListBinding
+import ru.mingaleev.weatherandroidkotlin.databinding.FragmentCitiesListBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.SP_DB_NAME
 import ru.mingaleev.weatherandroidkotlin.utils.SP_KEY_DB
@@ -27,14 +27,14 @@ class CitiesListFragment : Fragment(), OnItemClick {
 
     private var fabRForWorld = false
 
-    private lateinit var binding: FragmentWeatherListBinding
+    private lateinit var binding: FragmentCitiesListBinding
     private lateinit var viewModel: CitiesListViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentWeatherListBinding.inflate(inflater)
+        binding = FragmentCitiesListBinding.inflate(inflater)
         return binding.root
     }
 
@@ -91,7 +91,7 @@ class CitiesListFragment : Fragment(), OnItemClick {
         }
     }
 
-    private fun FragmentWeatherListBinding.setStateFragment(appState: AppStateWeatherList) {
+    private fun FragmentCitiesListBinding.setStateFragment(appState: AppStateWeatherList) {
         when (appState) {
             is AppStateWeatherList.Loading -> {
                 this.mainFragmentLoadingLayout.visibility = View.VISIBLE

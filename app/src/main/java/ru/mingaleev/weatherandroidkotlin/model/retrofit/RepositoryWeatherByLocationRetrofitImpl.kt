@@ -9,13 +9,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.mingaleev.weatherandroidkotlin.BuildConfig
 import ru.mingaleev.weatherandroidkotlin.domain.City
-import ru.mingaleev.weatherandroidkotlin.model.MyLargeSuperCallback
+import ru.mingaleev.weatherandroidkotlin.model.MySuperCallbackCity
 import ru.mingaleev.weatherandroidkotlin.model.RepositoryWeatherByLocation
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
 import ru.mingaleev.weatherandroidkotlin.utils.converterWeatherDtoToWeather
 
 class RepositoryWeatherByLocationRetrofitImpl : RepositoryWeatherByLocation {
-    override fun getWeather(city: City, callback: MyLargeSuperCallback) {
+    override fun getWeather(city: City, callback: MySuperCallbackCity) {
         val retrofitImpl = Retrofit.Builder()
         retrofitImpl.baseUrl("https://api.weather.yandex.ru")
         retrofitImpl.addConverterFactory(

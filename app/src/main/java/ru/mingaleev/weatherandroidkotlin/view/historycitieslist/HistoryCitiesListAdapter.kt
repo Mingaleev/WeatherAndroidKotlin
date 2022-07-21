@@ -1,4 +1,4 @@
-package ru.mingaleev.weatherandroidkotlin.view.weatherlist
+package ru.mingaleev.weatherandroidkotlin.view.historycitieslist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import ru.mingaleev.weatherandroidkotlin.databinding.FragmentWeatherListRecycler
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.view.details.OnItemClick
 
-class CitiesListAdapter(private val dataList:List<Weather>, private val callback: OnItemClick): RecyclerView.Adapter<CitiesListAdapter.WeatherViewHolder>() {
+class HistoryCitiesListAdapter(private val dataList:List<Weather>, private val callback: OnItemClick): RecyclerView.Adapter<HistoryCitiesListAdapter.WeatherViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding = FragmentWeatherListRecyclerItemsBinding.inflate(LayoutInflater.from(parent.context))

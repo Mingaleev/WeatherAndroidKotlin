@@ -5,15 +5,24 @@ import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 
 interface RepositoryWeatherByLocation {
-    fun getWeather(city: City, callback: MyLargeSuperCallback)
+    fun getWeather(city: City, callback: MySuperCallbackCity)
+}
+
+interface RepositoryHistoryCitiesList {
+    fun getHistoryListWeather(callbackListCities: MySuperCallbackListCities)
 }
 
 interface RepositoryAddWeatherToDB {
     fun addWeather(weather: Weather)
 }
 
-interface MyLargeSuperCallback {
+interface MySuperCallbackCity {
     fun onResponse(weather: Weather)
+    fun onFailure(e: IOException)
+}
+
+interface MySuperCallbackListCities {
+    fun onResponse(weather: List<Weather>)
     fun onFailure(e: IOException)
 }
 
