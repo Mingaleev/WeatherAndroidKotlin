@@ -10,6 +10,7 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentContentProviderBinding
@@ -87,6 +88,18 @@ class ContentProviderFragment : Fragment() {
             null,
             ContactsContract.Contacts.DISPLAY_NAME + " ASC"
         )
+
+        cursorWithContacts?.let {
+            for (i in 0 until it.count) {
+                it.moveToPosition(i)
+                val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                binding.containerForContacts.addView(TextView(requireContext()).apply {
+                    text = name
+                    textSize = 25f
+                })
+            }
+        }
+        cursorWithContacts?.close()
     }
 
     override fun onDestroy() {
