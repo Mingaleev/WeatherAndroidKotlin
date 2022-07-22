@@ -8,6 +8,6 @@
 
     <item
         android:id="@+id/menu_content_provider"
-        android:title="@string/content_provider"
+        android:title="@string/menu_content_provider"
         app:showAsAction="never" />
 </menu>

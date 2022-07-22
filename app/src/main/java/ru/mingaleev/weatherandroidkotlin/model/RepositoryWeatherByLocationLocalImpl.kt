@@ -11,11 +11,4 @@ class RepositoryWeatherByLocationLocalImpl : RepositoryWeatherByLocation {
         val response = listCities.filter { it.city.lat == city.lat && it.city.lon == city.lon }
         callback.onResponse(response.first())
     }
-
-//    private fun convertModelToDTO(weather: Weather): WeatherDTO {
-//        return WeatherDTO(
-//            Fact(weather.feelsLike, weather.temperature),
-//            Info(weather.city.lat, weather.city.lon)
-//        )
-//    }
 }

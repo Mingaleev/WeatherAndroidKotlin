@@ -17,7 +17,7 @@ class RepositoryRoomImpl: RepositoryWeatherByLocation, RepositoryAddWeatherToDB 
 
     override fun addWeather(weather: Weather) {
         Thread{
-            MyApp.getWeatherDatabase().weatherDAO().insert(convertorWeatherToWeatherEntity(weather))
+            MyApp.getWeatherDatabase().weatherDAO().insertRoom(convertorWeatherToWeatherEntity(weather))
         }.start()
     }
 

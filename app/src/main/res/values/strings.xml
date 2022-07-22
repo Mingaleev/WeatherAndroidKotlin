@@ -6,6 +6,8 @@
     <string name="error">Error</string>
     <string name="reload">Reload</string>
     <string name="history">HISTORY</string>
-    <string name="content_provider">CP</string>
+    <string name="menu_content_provider">CP</string>
 
+    <string name="authorities">lesson9.provider</string>
+    <string name="content_provider">Content provider</string>
 </resources>
