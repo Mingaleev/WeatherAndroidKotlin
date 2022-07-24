@@ -1,7 +1,8 @@
 package ru.mingaleev.weatherandroidkotlin.model
 
 import com.google.gson.Gson
-import okio.IOException
+import com.google.gson.JsonSyntaxException
+import org.json.JSONException
 import ru.mingaleev.weatherandroidkotlin.BuildConfig
 import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.model.dto.WeatherDTO
@@ -10,6 +11,8 @@ import ru.mingaleev.weatherandroidkotlin.utils.converterWeatherDtoToWeather
 import ru.mingaleev.weatherandroidkotlin.utils.getLines
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.UncheckedIOException
+import java.net.MalformedURLException
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -25,9 +28,16 @@ class RepositoryWeatherByLocationWeatherLoaderImpl: RepositoryWeatherByLocation 
                 val reader = BufferedReader(InputStreamReader(myConnection.inputStream))
                 val weatherDTO = Gson().fromJson(getLines(reader), WeatherDTO::class.java)
                 callback.onResponse(converterWeatherDtoToWeather(weatherDTO, city.name))
-            } catch (e: IOException) {
+            } catch (e: JSONException) {
                 callback.onFailure(e)
-                myConnection?.disconnect()
+            } catch (e: MalformedURLException) {
+                callback.onFailure(e)
+            } catch (e: IllegalStateException) {
+                callback.onFailure(e)
+            } catch (e: JsonSyntaxException) {
+                callback.onFailure(e)
+            }  catch (e: UncheckedIOException) {
+                callback.onFailure(e)
             } finally {
                 myConnection?.disconnect()
             }

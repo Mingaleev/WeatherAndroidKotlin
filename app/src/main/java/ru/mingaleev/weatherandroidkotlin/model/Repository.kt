@@ -18,7 +18,7 @@ interface RepositoryAddWeatherToDB {
 
 interface MySuperCallbackCity {
     fun onResponse(weather: Weather)
-    fun onFailure(e: IOException)
+    fun onFailure(e: Throwable)
 }
 
 interface MySuperCallbackListCities {

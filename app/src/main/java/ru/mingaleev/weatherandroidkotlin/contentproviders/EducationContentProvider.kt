@@ -83,7 +83,7 @@ class EducationContentProvider : ContentProvider() {
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri {
         val weather = mapperRawToWeatherEntity(values)
         weatherDAO.insertRoom(weather)
         context!!.contentResolver.notifyChange(
