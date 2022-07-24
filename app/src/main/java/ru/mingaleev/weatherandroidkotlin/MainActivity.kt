@@ -28,22 +28,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             R.id.menu_history -> {
+                supportFragmentManager.popBackStack()
                 supportFragmentManager.apply {
                     beginTransaction()
-                        .replace(R.id.container, HistoryCitiesListFragment())
+                        .replace(R.id.container, HistoryCitiesListFragment(), "tagHistory")
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
+
                 true
             }
             R.id.menu_content_provider -> {
+                supportFragmentManager.popBackStack()
                 supportFragmentManager.apply {
-                    beginTransaction()
-                        .replace(R.id.container, ContentProviderFragment())
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
+                        beginTransaction()
+                            .replace(R.id.container, ContentProviderFragment(), "tagCP")
+                            .addToBackStack("")
+                            .commitAllowingStateLoss()
                 }
                 true
             }
