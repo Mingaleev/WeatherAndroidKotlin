@@ -66,7 +66,7 @@ class DetailsViewModel(
             liveData.postValue(AppStateDetails.Success(weather))
         }
 
-        override fun onFailure(e: IOException) {
+        override fun onFailure(e: Throwable) {
             liveData.postValue(AppStateDetails.Error(e))
         }
     }

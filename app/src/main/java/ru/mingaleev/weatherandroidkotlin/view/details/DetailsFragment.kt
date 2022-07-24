@@ -10,6 +10,7 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
 import ru.mingaleev.weatherandroidkotlin.MyApp
+import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.BUNDLE_WEATHER_EXTRA
@@ -63,7 +64,10 @@ class DetailsFragment : Fragment() {
                     cityCoordinates.text =
                         "${appStateDetails.weather.city.lat} / ${appStateDetails.weather.city.lon}"
                     imageWeather.load(
-                        "https://yastatic.net/weather/i/icons/funky/dark/${appStateDetails.weather.icon}.svg", imageLoader)
+                        "https://yastatic.net/weather/i/icons/funky/dark/${appStateDetails.weather.icon}.svg", imageLoader){
+                        placeholder(R.drawable.loading_icon)
+                        error(R.drawable.error_loading)
+                    }
                 }
             }
         }
