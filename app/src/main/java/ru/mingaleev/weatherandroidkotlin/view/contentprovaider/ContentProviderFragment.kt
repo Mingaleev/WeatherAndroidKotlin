@@ -3,8 +3,10 @@ package ru.mingaleev.weatherandroidkotlin.view.contentprovaider
 import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.LayoutInflater
@@ -39,6 +41,27 @@ class ContentProviderFragment : Fragment() {
         checkPermission()
     }
 
+    private fun checkPermissionCall(): Boolean {
+        val permResult =
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE)
+        return if (permResult == PackageManager.PERMISSION_GRANTED) {
+            true
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Вызов контакта")
+                .setMessage("Для вызова контакта необходимо Разрешение")
+                .setPositiveButton("Разрешить вызовы") { _, _ ->
+                    permissionRequest(Manifest.permission.CALL_PHONE)
+                }.setNegativeButton("Отказаться") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+            false
+        } else {
+            permissionRequest(Manifest.permission.CALL_PHONE)
+            false
+        }
+    }
+
     private fun checkPermission() {
         val permResult =
             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
@@ -47,7 +70,7 @@ class ContentProviderFragment : Fragment() {
         } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Доступ к кнотактам")
-                .setMessage("Мне только спросить и все!)")
+                .setMessage("Для отображения списка контактов необходимо Разрешение")
                 .setPositiveButton("Предоставить доступ") { _, _ ->
                     permissionRequest(Manifest.permission.READ_CONTACTS)
                 }.setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
@@ -93,13 +116,19 @@ class ContentProviderFragment : Fragment() {
                 it.moveToPosition(i)
                 val name = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                 val tel = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                binding.containerForContacts.addView(TextView(requireContext()).apply {
+                binding.containerForContacts.addView(
+                    TextView(requireContext()).apply {
                     text = name
                     textSize = 30f
                 })
                 binding.containerForContacts.addView(TextView(requireContext()).apply {
                     text = tel
                     textSize = 15f
+                    setOnClickListener(){
+                        if (checkPermissionCall()){
+                            startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${tel}")))
+                        }
+                    }
                 })
             }
         }
