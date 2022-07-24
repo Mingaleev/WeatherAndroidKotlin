@@ -75,27 +75,31 @@ class ContentProviderFragment : Fragment() {
                 }
             }
         }
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun getContacts() {
         val contentResolver: ContentResolver = requireContext().contentResolver
         val cursorWithContacts: Cursor? = contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
             null,
             null,
-            ContactsContract.Contacts.DISPLAY_NAME + " ASC"
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         )
 
         cursorWithContacts?.let {
             for (i in 0 until it.count) {
                 it.moveToPosition(i)
-                val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val name = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val tel = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 binding.containerForContacts.addView(TextView(requireContext()).apply {
                     text = name
-                    textSize = 25f
+                    textSize = 30f
+                })
+                binding.containerForContacts.addView(TextView(requireContext()).apply {
+                    text = tel
+                    textSize = 15f
                 })
             }
         }
