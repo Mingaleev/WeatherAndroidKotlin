@@ -1,16 +1,24 @@
 package ru.mingaleev.weatherandroidkotlin.view.citieslist
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentCitiesListBinding
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
+import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_LOCATION
 import ru.mingaleev.weatherandroidkotlin.utils.SP_DB_NAME
 import ru.mingaleev.weatherandroidkotlin.utils.SP_KEY_DB
 import ru.mingaleev.weatherandroidkotlin.utils.createAndShowSnackbar
@@ -47,23 +55,88 @@ class CitiesListFragment : Fragment(), OnItemClick {
         fabRForWorld = sp.getBoolean(SP_KEY_DB, false)
         setRussiaOrWorld()
 
-        binding.FragmentFAB.setOnClickListener() {
+        binding.weatherListFragmentFABCities.setOnClickListener() {
             setRussiaOrWorld()
-            sp.edit().apply{
+            sp.edit().apply {
                 putBoolean(SP_KEY_DB, !fabRForWorld)
                 apply()
             }
         }
+
+        binding.weatherListFragmentFABLocation.setOnClickListener() {
+            checkPermission()
+        }
     }
 
-    private fun setRussiaOrWorld (){
+    private fun getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            val locationManager =
+                requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    10000L,
+                    0F
+                ) { location -> Log.d("@@@", "${location.latitude}, ${location.longitude}") }
+            }
+        }
+    }
+
+    private fun checkPermission() {
+        val permResult = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (permResult == PackageManager.PERMISSION_GRANTED) {
+            getLocation()
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Доступ к локации")
+                .setMessage("Для получения погоды по вашему местоположению необходимо Разрешение")
+                .setPositiveButton("Предоставить доступ") { _, _ ->
+                    permissionGPSRequest(Manifest.permission.ACCESS_FINE_LOCATION)
+                }.setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        } else {
+            permissionGPSRequest(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private fun permissionGPSRequest(permission: String) {
+        requestPermissions(arrayOf(permission), REQUEST_CODE_LOCATION)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            for (i in permissions.indices) {
+                if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION
+                    && grantResults[i] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    getLocation()
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun setRussiaOrWorld() {
         fabRForWorld = if (fabRForWorld) {
             viewModel.getWeatherListForWorld()
-            binding.FragmentFAB.setImageResource(R.drawable.ic_earth)
+            binding.weatherListFragmentFABCities.setImageResource(R.drawable.ic_earth)
             false
         } else {
             viewModel.getWeatherListForRussia()
-            binding.FragmentFAB.setImageResource(R.drawable.ic_russia)
+            binding.weatherListFragmentFABCities.setImageResource(R.drawable.ic_russia)
             true
         }
     }

@@ -17,7 +17,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FragmentFAB"
+        android:id="@+id/weatherListFragmentFABLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@drawable/gps"
+        app:layout_constraintBottom_toTopOf="@id/weatherListFragmentFABCities"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="56dp"
+        app:tint="@null"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/weatherListFragmentFABCities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
