@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentContentProviderBinding
+import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_CALL_PHONE
 import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_READ_CONTACTS
 
 class ContentProviderFragment : Fragment() {
@@ -25,6 +26,7 @@ class ContentProviderFragment : Fragment() {
         get() {
             return _binding!!
         }
+    private var telBuffer = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,13 +53,13 @@ class ContentProviderFragment : Fragment() {
                 .setTitle("Вызов контакта")
                 .setMessage("Для вызова контакта необходимо Разрешение")
                 .setPositiveButton("Разрешить вызовы") { _, _ ->
-                    permissionRequest(Manifest.permission.CALL_PHONE)
+                    permissionCallRequest(Manifest.permission.CALL_PHONE)
                 }.setNegativeButton("Отказаться") { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
             false
         } else {
-            permissionRequest(Manifest.permission.CALL_PHONE)
+            permissionCallRequest(Manifest.permission.CALL_PHONE)
             false
         }
     }
@@ -72,17 +74,21 @@ class ContentProviderFragment : Fragment() {
                 .setTitle("Доступ к кнотактам")
                 .setMessage("Для отображения списка контактов необходимо Разрешение")
                 .setPositiveButton("Предоставить доступ") { _, _ ->
-                    permissionRequest(Manifest.permission.READ_CONTACTS)
+                    permissionReadRequest(Manifest.permission.READ_CONTACTS)
                 }.setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
         } else {
-            permissionRequest(Manifest.permission.READ_CONTACTS)
+            permissionReadRequest(Manifest.permission.READ_CONTACTS)
         }
     }
 
-    private fun permissionRequest(permission: String) {
+    private fun permissionReadRequest(permission: String) {
         requestPermissions(arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
+    }
+
+    private fun permissionCallRequest(permission: String) {
+        requestPermissions(arrayOf(permission), REQUEST_CODE_CALL_PHONE)
     }
 
     override fun onRequestPermissionsResult(
@@ -90,12 +96,18 @@ class ContentProviderFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE_READ_CONTACTS){
-            for(i in permissions.indices){
+        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
+            for (i in permissions.indices) {
                 if (permissions[i] == Manifest.permission.READ_CONTACTS
-                    && grantResults[i] == PackageManager.PERMISSION_GRANTED){
-                    getContacts()
-                }
+                    && grantResults[i] == PackageManager.PERMISSION_GRANTED
+                ) { getContacts() }
+            }
+        }
+        if (requestCode == REQUEST_CODE_CALL_PHONE) {
+            for (i in permissions.indices) {
+                if (permissions[i] == Manifest.permission.CALL_PHONE
+                    && grantResults[i] == PackageManager.PERMISSION_GRANTED
+                ) { callPhone() }
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -125,6 +137,7 @@ class ContentProviderFragment : Fragment() {
                     text = tel
                     textSize = 15f
                     setOnClickListener(){
+                        telBuffer = tel
                         if (checkPermissionCall()){
                             startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${tel}")))
                         }
@@ -133,6 +146,10 @@ class ContentProviderFragment : Fragment() {
             }
         }
         cursorWithContacts?.close()
+    }
+
+    private fun callPhone () {
+        startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${telBuffer}")))
     }
 
     override fun onDestroy() {

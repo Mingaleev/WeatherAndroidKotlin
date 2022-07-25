@@ -16,6 +16,7 @@ const val SP_KEY_DB = "KEY"
 const val ROOM_DB_NAME = "room_data_base"
 
 const val REQUEST_CODE_READ_CONTACTS = 999
+const val REQUEST_CODE_CALL_PHONE = 888
 
 const val ID = "id"
 const val CITY = "city"
