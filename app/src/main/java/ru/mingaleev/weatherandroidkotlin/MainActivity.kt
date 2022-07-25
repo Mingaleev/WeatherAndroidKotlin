@@ -1,9 +1,11 @@
 package ru.mingaleev.weatherandroidkotlin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
 import ru.mingaleev.weatherandroidkotlin.view.citieslist.CitiesListFragment
 import ru.mingaleev.weatherandroidkotlin.view.contentprovaider.ContentProviderFragment
@@ -28,30 +30,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
+        when (item.itemId) {
             R.id.menu_history -> {
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.apply {
-                    beginTransaction()
-                        .replace(R.id.container, HistoryCitiesListFragment(), "tagHistory")
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
-                }
-
-                true
+                transaction(HistoryCitiesListFragment(), "tagHistory")
+                return true
             }
             R.id.menu_content_provider -> {
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.apply {
-                        beginTransaction()
-                            .replace(R.id.container, ContentProviderFragment(), "tagCP")
-                            .addToBackStack("")
-                            .commitAllowingStateLoss()
-                }
-                true
+                transaction(ContentProviderFragment(), "tagCP")
+                return true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    private fun transaction(fragment: Fragment, tag: String) {
+        if (supportFragmentManager.findFragmentByTag(tag) == null) {
+            supportFragmentManager.apply {
+                beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .addToBackStack(tag)
+                    .commitAllowingStateLoss()
+            }
+        } else {
+            supportFragmentManager.findFragmentByTag(tag)?.let {
+                supportFragmentManager.popBackStack(tag, 1)
+            }
+            supportFragmentManager.apply {
+                beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .addToBackStack(tag)
+                    .commitAllowingStateLoss()
+            }
         }
     }
 }
