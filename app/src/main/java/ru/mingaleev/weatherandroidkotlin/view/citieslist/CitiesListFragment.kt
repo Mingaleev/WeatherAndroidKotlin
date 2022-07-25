@@ -4,6 +4,9 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentCitiesListBinding
+import ru.mingaleev.weatherandroidkotlin.domain.City
 import ru.mingaleev.weatherandroidkotlin.domain.Weather
 import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_LOCATION
 import ru.mingaleev.weatherandroidkotlin.utils.SP_DB_NAME
@@ -68,23 +72,47 @@ class CitiesListFragment : Fragment(), OnItemClick {
         }
     }
 
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            getAddress(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+
+    lateinit var locationManager: LocationManager
+
     private fun getLocation() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            val locationManager =
+            locationManager =
                 requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
                     10000L,
-                    0F
-                ) { location -> Log.d("@@@", "${location.latitude}, ${location.longitude}") }
+                    0F,
+                    locationListener
+                )
             }
         }
+    }
+
+    fun getAddress (location: Location){
+        val geocoder = Geocoder(context)
+        val cityNow = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        locationManager.removeUpdates(locationListener)
+        onItemClick(Weather(City(cityNow.first().locality, cityNow.first().latitude, cityNow.first().longitude)))
     }
 
     private fun checkPermission() {

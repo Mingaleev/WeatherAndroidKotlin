@@ -22,6 +22,7 @@ fun converterWeatherDtoToWeather (weatherDTO: WeatherDTO, nameCity: String): Wea
     return Weather(
         City(nameCity, weatherDTO.info.lat, weatherDTO.info.lon),
         weatherDTO.fact.temp,
-        weatherDTO.fact.feelsLike
+        weatherDTO.fact.feelsLike,
+        weatherDTO.fact.icon
     )
 }
