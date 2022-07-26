@@ -7,6 +7,7 @@
     <string name="reload">Reload</string>
     <string name="history">HISTORY</string>
     <string name="menu_content_provider">Contacts</string>
+    <string name="menu_maps">Maps</string>
 
     <string name="authorities">lesson9.provider</string>
     <string name="content_provider">Content provider</string>
@@ -22,4 +23,8 @@
     <string name="dialog_rationale_give_access">Предоставить доступ</string> <string name="dialog_rationale_decline">Не надо</string>
     <string name="dialog_address_title">Ваш адрес</string>
     <string name="dialog_address_get_weather">Узнать погоду</string>
+
+    <string name="default_address">Kazan</string>
+    <string name="button_search_location">Поиск</string>
+    <string name="marker_start">Start</string>
 </resources>

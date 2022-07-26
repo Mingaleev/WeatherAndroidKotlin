@@ -10,4 +10,10 @@
         android:id="@+id/menu_content_provider"
         android:title="@string/menu_content_provider"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_maps"
+        android:title="@string/menu_maps"
+        android:icon="@drawable/maps"
+        app:showAsAction="ifRoom" />
 </menu>

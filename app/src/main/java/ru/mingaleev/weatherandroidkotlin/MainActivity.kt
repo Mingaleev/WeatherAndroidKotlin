@@ -10,6 +10,7 @@ import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
 import ru.mingaleev.weatherandroidkotlin.view.citieslist.CitiesListFragment
 import ru.mingaleev.weatherandroidkotlin.view.contentprovaider.ContentProviderFragment
 import ru.mingaleev.weatherandroidkotlin.view.historycitieslist.HistoryCitiesListFragment
+import ru.mingaleev.weatherandroidkotlin.view.maps.MapsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +38,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menu_content_provider -> {
                 transaction(ContentProviderFragment(), "tagCP")
+                return true
+            }
+            R.id.menu_maps -> {
+                transaction(MapsFragment(), "tagMaps")
                 return true
             }
             else -> super.onOptionsItemSelected(item)
