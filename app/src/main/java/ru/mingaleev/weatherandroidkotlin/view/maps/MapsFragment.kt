@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentMapsUiBinding
 import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_LOCATION
+import java.util.*
 
 
 class MapsFragment : Fragment() {
@@ -60,7 +61,9 @@ class MapsFragment : Fragment() {
         binding.searchAddress.text
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
+        if (Locale.getDefault().language.toString() == "ru"){
+            binding.searchAddress.setText("Казань")
+        }
         binding.buttonSearch.setOnClickListener{
             binding.searchAddress.text.toString().let { address ->
                 val geocoder = Geocoder(context)
@@ -68,7 +71,7 @@ class MapsFragment : Fragment() {
                 if (result.size > 0) {
                     val latLng = LatLng(result.first().latitude, result.first().longitude)
                     map.clear()
-                    map.addMarker(MarkerOptions().position(latLng))
+                    map.addMarker(MarkerOptions().position(latLng).title(address))
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     binding.mapsSearchError.isVisible = false
                 } else {
