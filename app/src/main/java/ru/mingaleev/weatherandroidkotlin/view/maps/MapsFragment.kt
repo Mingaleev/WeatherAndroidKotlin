@@ -1,28 +1,24 @@
 package ru.mingaleev.weatherandroidkotlin.view.maps
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Geocoder
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.*
 import ru.mingaleev.weatherandroidkotlin.R
-import ru.mingaleev.weatherandroidkotlin.databinding.FragmentDetailsWeatherBinding
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentMapsUiBinding
-import java.util.*
 
 class MapsFragment : Fragment() {
 
@@ -32,6 +28,8 @@ class MapsFragment : Fragment() {
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        setButtonMyLocation (googleMap)
     }
 
     private var _binding: FragmentMapsUiBinding? = null
@@ -63,7 +61,7 @@ class MapsFragment : Fragment() {
                     val latLng = LatLng(result.first().latitude, result.first().longitude)
                     map.clear()
                     map.addMarker(MarkerOptions().position(latLng))
-                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     binding.mapsSearchError.isVisible = false
                 } else {
                     Toast.makeText(context, "Такого города не найдено", Toast.LENGTH_LONG).show()
@@ -71,6 +69,16 @@ class MapsFragment : Fragment() {
                     binding.mapsSearchError.text = "Город не найдет, попробуйте снова"
                 }
             }
+        }
+    }
+
+    private fun setButtonMyLocation (googleMap: GoogleMap) {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.isMyLocationEnabled = true
+            googleMap.uiSettings.isMyLocationButtonEnabled = true
         }
     }
 
