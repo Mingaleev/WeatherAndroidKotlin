@@ -2,9 +2,12 @@ package ru.mingaleev.weatherandroidkotlin.view.maps
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +22,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import ru.mingaleev.weatherandroidkotlin.R
 import ru.mingaleev.weatherandroidkotlin.databinding.FragmentMapsUiBinding
 import ru.mingaleev.weatherandroidkotlin.utils.REQUEST_CODE_LOCATION
+
 
 class MapsFragment : Fragment() {
 
@@ -107,8 +112,33 @@ class MapsFragment : Fragment() {
                 .create()
                 .show()
         } else {
+            showNoStoragePermissionSnackbar()
             permissionRequest(Manifest.permission.ACCESS_FINE_LOCATION)
         }
+    }
+
+    private fun showNoStoragePermissionSnackbar() {
+        Snackbar.make(binding.root, "Разрешите доступ Настройки -> Права -> Геоданные", 10000)
+            .setAction("НАСТРОЙКИ") {
+                openApplicationSettings()
+            }
+            .show()
+    }
+
+    private fun openApplicationSettings() {
+        val appSettingsIntent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.parse("package:ru.mingaleev.weatherandroidkotlin")
+        )
+        startActivityForResult(appSettingsIntent, REQUEST_CODE_LOCATION)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            setButtonMyLocation(map)
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun permissionRequest(permission: String) {
