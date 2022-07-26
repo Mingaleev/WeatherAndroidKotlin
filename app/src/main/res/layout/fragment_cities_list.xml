@@ -21,12 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:src="@drawable/gps"
+        android:src="@drawable/placeholder"
         app:layout_constraintBottom_toTopOf="@id/weatherListFragmentFABCities"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="56dp"
-        app:tint="@null"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:backgroundTint="@color/white"
+        app:backgroundTint="@color/white"
+        app:maxImageSize="@dimen/cities_list_image_size" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/weatherListFragmentFABCities"
@@ -36,7 +36,7 @@
         android:src="@drawable/ic_russia"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="56dp"
+        app:maxImageSize="@dimen/cities_list_image_size"
         app:tint="@null"
         tools:ignore="SpeakableTextPresentCheck" />
 

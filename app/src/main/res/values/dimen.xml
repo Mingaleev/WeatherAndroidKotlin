@@ -13,4 +13,5 @@
     <dimen name="recycler_item_line_margin_end">20dp</dimen>
 
     <dimen name="fab_location_icon_size">45dp</dimen>
+    <dimen name="cities_list_image_size">56dp</dimen>
 </resources>
