@@ -31,32 +31,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, CitiesListFragment.newInstance()).commit()
         }
-
-        pushNotification("ПОГОДА СЕЙЧАС", "Узнайте погоду сейчас, что бы быть готовым ко всему")
-    }
-
-
-    private fun pushNotification(title: String, body: String) {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_HIGH_ID).apply {
-            setContentTitle(title)
-            setContentText(body)
-            setSmallIcon(R.drawable.maps)
-            priority = NotificationCompat.PRIORITY_MAX
-        }.build()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelHigh = NotificationChannel(
-                CHANNEL_HIGH_ID,
-                CHANNEL_HIGH_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            channelHigh.description = "Канал для важных уведомлений"
-            notificationManager.createNotificationChannel(channelHigh)
-        }
-        notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
