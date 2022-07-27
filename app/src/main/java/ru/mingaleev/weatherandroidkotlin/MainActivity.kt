@@ -1,10 +1,13 @@
 package ru.mingaleev.weatherandroidkotlin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
 import ru.mingaleev.weatherandroidkotlin.view.citieslist.CitiesListFragment
 import ru.mingaleev.weatherandroidkotlin.view.contentprovaider.ContentProviderFragment
@@ -23,6 +26,14 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, CitiesListFragment.newInstance()).commit()
         }
+
+        //  Для проверки ДЗ
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            Log.d("@@@", task.result)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
