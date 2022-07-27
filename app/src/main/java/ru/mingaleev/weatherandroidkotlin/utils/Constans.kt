@@ -25,5 +25,6 @@ const val TEMPERATURE = "temperature"
 
 const val CHANNEL_HIGH_ID = "channel_high"
 const val CHANNEL_HIGH_NAME = "channel_high"
-const val CHANNEL_LOW_ID = "channel_low"
 const val NOTIFICATION_ID = 1
+const val NOTIFICATION_KEY_TITLE = "myTitle"
+const val NOTIFICATION_KEY_BODY = "myBody"

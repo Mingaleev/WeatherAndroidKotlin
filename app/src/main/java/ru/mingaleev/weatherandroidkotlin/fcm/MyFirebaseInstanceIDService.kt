@@ -7,10 +7,9 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import ru.mingaleev.weatherandroidkotlin.R
-import ru.mingaleev.weatherandroidkotlin.utils.CHANNEL_HIGH_ID
-import ru.mingaleev.weatherandroidkotlin.utils.CHANNEL_HIGH_NAME
-import ru.mingaleev.weatherandroidkotlin.utils.NOTIFICATION_ID
+import ru.mingaleev.weatherandroidkotlin.utils.*
 
 class MyFirebaseInstanceIDService : FirebaseMessagingService() {
 
@@ -18,6 +17,16 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
         Log.d("@@@", token)
         pushNotification(token, token)
         super.onNewToken(token)
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        val data = message.data
+        val title = data[NOTIFICATION_KEY_TITLE]
+        val body = data[NOTIFICATION_KEY_BODY]
+        if (!title.isNullOrEmpty() && !body.isNullOrEmpty()) {
+            pushNotification(title, body)
+        }
+        super.onMessageReceived(message)
     }
 
     private fun pushNotification(title: String, body: String) {

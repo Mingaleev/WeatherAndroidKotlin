@@ -1,19 +1,11 @@
 package ru.mingaleev.weatherandroidkotlin
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import ru.mingaleev.weatherandroidkotlin.databinding.ActivityMainBinding
-import ru.mingaleev.weatherandroidkotlin.utils.CHANNEL_HIGH_ID
-import ru.mingaleev.weatherandroidkotlin.utils.CHANNEL_HIGH_NAME
-import ru.mingaleev.weatherandroidkotlin.utils.NOTIFICATION_ID
 import ru.mingaleev.weatherandroidkotlin.view.citieslist.CitiesListFragment
 import ru.mingaleev.weatherandroidkotlin.view.contentprovaider.ContentProviderFragment
 import ru.mingaleev.weatherandroidkotlin.view.historycitieslist.HistoryCitiesListFragment
