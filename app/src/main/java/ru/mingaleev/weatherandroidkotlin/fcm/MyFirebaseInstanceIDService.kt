@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -36,22 +37,17 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notificationIntent = Intent(applicationContext, MainActivity::class.java)
-        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val notificationView = RemoteViews(this.packageName, R.layout.notification_layout).apply {
+            setTextViewText(R.id.notification_title, title)
+            setTextViewText(R.id.notification_body, body)
+        }
 
-        val contentIntent = PendingIntent.getActivity(
-            this,
-            1,
-            notificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_HIGH_ID).apply {
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_HIGH_ID).apply {
             setContentTitle(title)
             setContentText(body)
             setSmallIcon(R.drawable.maps)
+            setCustomContentView(notificationView)
             priority = NotificationCompat.PRIORITY_MAX
-            setContentIntent(contentIntent)
         }.build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -63,6 +59,10 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
             channelHigh.description = "Канал для важных уведомлений"
             notificationManager.createNotificationChannel(channelHigh)
         }
-        notificationManager.notify(NOTIFICATION_ID, notification)
+
+        val intent = Intent(this, MainActivity::class.java)
+        val pIntent = PendingIntent.getActivity(this, 1, intent, 0)
+        notificationView.setOnClickPendingIntent(R.id.open, pIntent)
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder)
     }
 }
