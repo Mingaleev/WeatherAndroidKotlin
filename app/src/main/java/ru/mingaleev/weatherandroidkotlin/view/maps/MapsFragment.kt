@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -99,29 +100,30 @@ class MapsFragment : Fragment() {
 
     private fun checkPermission(googleMap: GoogleMap) {
         map = googleMap
-        val permResult = ContextCompat.checkSelfPermission(
+        val permFineLocResult = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        if (permResult == PackageManager.PERMISSION_GRANTED) {
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (permFineLocResult) {
             setButtonMyLocation(googleMap)
         } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Доступ к локации")
                 .setMessage("Для отображения вашего местоположения необходимо Разрешение")
                 .setPositiveButton("Предоставить доступ") { _, _ ->
-                    permissionRequest(Manifest.permission.ACCESS_FINE_LOCATION)
+                    permissionRequest()
                 }.setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
         } else {
+            permissionRequest()
             showNoStoragePermissionSnackbar()
-            permissionRequest(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
     private fun showNoStoragePermissionSnackbar() {
-        Snackbar.make(binding.root, "Разрешите доступ Настройки -> Права -> Геоданные", 10000)
+        Snackbar.make(binding.root, "Разрешите доступ Настройки -> Права -> Геоданные", 5000)
             .setAction("НАСТРОЙКИ") {
                 openApplicationSettings()
             }
@@ -144,8 +146,20 @@ class MapsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun permissionRequest(permission: String) {
-        requestPermissions(arrayOf(permission), REQUEST_CODE_LOCATION)
+    private fun permissionRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ), REQUEST_CODE_LOCATION
+            )
+        } else {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_CODE_LOCATION
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(
