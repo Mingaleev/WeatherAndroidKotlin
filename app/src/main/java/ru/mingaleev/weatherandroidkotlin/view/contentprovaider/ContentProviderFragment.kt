@@ -40,7 +40,7 @@ class ContentProviderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkPermission()
+        checkPermissionContacts()
     }
 
     private fun checkPermissionCall(): Boolean {
@@ -64,7 +64,7 @@ class ContentProviderFragment : Fragment() {
         }
     }
 
-    private fun checkPermission() {
+    private fun checkPermissionContacts() {
         val permResult =
             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
         if (permResult == PackageManager.PERMISSION_GRANTED) {

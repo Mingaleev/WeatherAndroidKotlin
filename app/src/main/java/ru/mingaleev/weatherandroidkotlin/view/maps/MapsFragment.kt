@@ -66,20 +66,24 @@ class MapsFragment : Fragment() {
             binding.searchAddress.setText("Казань")
         }
         binding.buttonSearch.setOnClickListener{
-            binding.searchAddress.text.toString().let { address ->
-                val geocoder = Geocoder(context)
-                val result = geocoder.getFromLocationName(address, 1)
-                if (result.size > 0) {
-                    val latLng = LatLng(result.first().latitude, result.first().longitude)
-                    map.clear()
-                    map.addMarker(MarkerOptions().position(latLng).title(address))
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
-                    binding.mapsSearchError.isVisible = false
-                } else {
-                    Toast.makeText(context, "Такого города не найдено", Toast.LENGTH_LONG).show()
-                    binding.mapsSearchError.isVisible = true
-                    binding.mapsSearchError.text = "Город не найдет, попробуйте снова"
-                }
+            searchLocationByAddress(binding.searchAddress.text.toString())
+        }
+    }
+
+    private fun searchLocationByAddress (address : String) {
+        address.let {
+            val geocoder = Geocoder(context)
+            val result = geocoder.getFromLocationName(it, 1)
+            if (result.size > 0) {
+                val latLng = LatLng(result.first().latitude, result.first().longitude)
+                map.clear()
+                map.addMarker(MarkerOptions().position(latLng).title(it))
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                binding.mapsSearchError.isVisible = false
+            } else {
+                Toast.makeText(context, "Такого города не найдено", Toast.LENGTH_LONG).show()
+                binding.mapsSearchError.isVisible = true
+                binding.mapsSearchError.text = "Город не найдет, попробуйте снова"
             }
         }
     }

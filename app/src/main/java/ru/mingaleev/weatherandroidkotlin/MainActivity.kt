@@ -44,15 +44,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_history -> {
-                transaction(HistoryCitiesListFragment(), "tagHistory")
+                navigationTo(HistoryCitiesListFragment(), "tagHistory")
                 return true
             }
             R.id.menu_content_provider -> {
-                transaction(ContentProviderFragment(), "tagCP")
+                navigationTo(ContentProviderFragment(), "tagCP")
                 return true
             }
             R.id.menu_maps -> {
-                transaction(MapsFragment(), "tagMaps")
+                navigationTo(MapsFragment(), "tagMaps")
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun transaction(fragment: Fragment, tag: String) {
+    private fun navigationTo(fragment: Fragment, tag: String) {
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             supportFragmentManager.apply {
                 beginTransaction()
