@@ -20,9 +20,47 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
+            Properties properties = new Properties()
+            properties.load(rootProject.file("passwordRelease.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+
+            storeFile file("release.jks")
+            storePassword = password
+            keyAlias 'minga'
+            keyPassword = password
+        }
+
+        education {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("passwordEducation.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+
+            storeFile file("education.jks")
+            storePassword = password
+            keyAlias 'minga'
+            keyPassword = password
+        }
+    }
+
+    buildTypes {
+        education {
+            signingConfig = signingConfigs.education
+            multiDexEnabled true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled true
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            signingConfig = signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,7 +82,6 @@ android {
         def apiKey = properties.getProperty("yandex_weather_api_key", "")
         it.buildConfigField "String", "WEATHER_API_KEY", apiKey
     }
-
 }
 
 dependencies {
