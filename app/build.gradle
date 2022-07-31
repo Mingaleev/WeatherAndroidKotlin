@@ -43,7 +43,6 @@ android {
             keyPassword = password
         }
     }
-
     buildTypes {
         education {
             signingConfig = signingConfigs.education
@@ -71,9 +70,17 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
     buildFeatures {
         viewBinding true
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        PRO {
+            dimension 'version'
+        }
+        FREE {
+            dimension 'version'
+        }
     }
 
     buildTypes.each{

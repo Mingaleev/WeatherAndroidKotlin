@@ -61,7 +61,9 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
         }
 
         val intent = Intent(this, MainActivity::class.java)
-        val pIntent = PendingIntent.getActivity(this, 1, intent, 0)
+        val pIntent = PendingIntent.getActivity(
+            this, 1, intent, PendingIntent.FLAG_IMMUTABLE
+        )// при флаге "0" приложение падает в 1 раз
         notificationView.setOnClickPendingIntent(R.id.open, pIntent)
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder)
     }

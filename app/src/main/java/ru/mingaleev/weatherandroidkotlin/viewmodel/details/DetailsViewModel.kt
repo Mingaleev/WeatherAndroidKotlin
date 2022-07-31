@@ -21,7 +21,7 @@ class DetailsViewModel(
 
     private fun choiceRepository() {
         if (isConnection()){
-            repositoryWeatherByLocation = when (2) {
+            repositoryWeatherByLocation = when (1) {
                 1 -> {
                     RepositoryWeatherByLocationOkHttpImpl()
                 }
